@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Workspace {
+  id              String     @id @default(uuid()) @db.Uuid
+  cookieTokenHash String     @unique(map: "workspaces_cookie_token_hash_key") @map("cookie_token_hash") @db.Text
+  apiJs           String     @map("api_js") @db.Text
+  createdAt       DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
+  lastActivityAt  DateTime   @default(now()) @map("last_activity_at") @db.Timestamptz(6)
+  snippets        Snippet[]
+
+  @@index([lastActivityAt], map: "workspaces_last_activity_at_idx")
+  @@map("workspaces")
+}
+
+model Snippet {
+  id          String    @id @default(uuid()) @db.Uuid
+  workspaceId String    @map("workspace_id") @db.Uuid
+  title       String    @db.VarChar(120)
+  language    String    @db.VarChar(50)
+  description String?   @db.VarChar(1000)
+  code        String    @db.Text
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([workspaceId, title], map: "snippets_workspace_id_title_idx")
+  @@index([workspaceId, language], map: "snippets_workspace_id_language_idx")
+  @@map("snippets")
+}

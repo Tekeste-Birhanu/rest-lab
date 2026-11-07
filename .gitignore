@@ -1,0 +1,8 @@
+/server/node_modules/
+/server/dist/
+/server/coverage/
+/server/generated/
+/server/.env
+/server/.env.*
+!/server/.env.example
+/server/src/generated/prisma/
