@@ -1,7 +1,6 @@
 import express, { Router } from 'express'
 import { loadServerConfig } from '../config.ts'
 import { prisma } from '../db/prisma.ts'
-import { requireTrustedOrigin } from '../middleware/require-trusted-origin.ts'
 import { sendApiError } from '../http/api-error.ts'
 import {
   createWorkspaceToken,
@@ -16,9 +15,7 @@ export const MAX_API_JS_BYTES = 1_000_000
 const config = loadServerConfig()
 export const sessionRouter = Router()
 
-const trustedOrigin = requireTrustedOrigin(config)
-
-sessionRouter.post('/api/session', trustedOrigin, async (request, response) => {
+sessionRouter.post('/api/session', async (request, response) => {
   const token = readWorkspaceToken(request.get('cookie'))
   if (token) {
     const existing = await prisma.workspace.findUnique({
@@ -44,7 +41,6 @@ sessionRouter.post('/api/session', trustedOrigin, async (request, response) => {
 
 sessionRouter.put(
   '/api/session/api-js',
-  trustedOrigin,
   (request, response, next) => {
     const contentType = request.get('content-type') ?? ''
     if (!/^text\/plain\s*;\s*charset\s*=\s*(?:"utf-8"|utf-8)\s*$/i.test(contentType)) {

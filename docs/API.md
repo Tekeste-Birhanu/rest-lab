@@ -39,7 +39,7 @@ The server scopes every operation to the workspace identified by the cookie. A s
 | `sortBy` | Sort field. | `title` by default; `title` or `language`. |
 | `order` | Sort direction. | `asc` by default; `asc` or `desc`. |
 | `limit` | Maximum number of records returned. | `20` by default; maximum `100`. |
-| `offset` | Number of matching records to skip. | `0` by default; non-negative integer. |
+| `offset` | Number of matching records to skip. | `0` by default; non-negative safe integer. |
 
 Sorting compares the selected field case-insensitively, with snippet ID as a stable tie-breaker for equal values. `total` is the count after applying search and language filters, before pagination.
 
@@ -112,7 +112,7 @@ The example is fictional. `description` is `null` when no description is set. Ti
 - `description`: optional or null, maximum 1,000 characters.
 - `code`: required for create and replace, must contain non-whitespace content, maximum 100 KB UTF-8. Preserve the submitted code exactly.
 - `snippetId`: UUID path parameter.
-- `limit`: integer from 1 through 100; `offset`: non-negative integer.
+- `limit`: integer from 1 through 100; `offset`: non-negative safe integer, up to `9007199254740991` so it remains exact in JavaScript and JSON.
 - `sortBy`: `title` or `language`; comparisons are case-insensitive. `order`: `asc` or `desc`.
 
 Validation failures return `400` and do not modify stored data. Unsupported request content types return `415`. JSON request bodies above 2 MB return `413`; the plain-text `api.js` save body is limited to 1 MB UTF-8.
@@ -169,16 +169,16 @@ All error responses use this shape:
 | Status | When it is used |
 |---|---|
 | `400 Bad Request` | Invalid JSON, query/path parameter, unknown field, or validation failure. |
-| `401 Unauthorized` | An app-support request requires a workspace session, but its cookie is missing, malformed, or unknown. Initialize with `POST /api/session`. |
+| `401 Unauthorized` | A workspace-data request requires a session, but its cookie is missing, malformed, or unknown. Initialize with `POST /api/session`. |
 | `403 Forbidden` | A mutation request has a missing or mismatched `Origin` header. |
-| `404 Not Found` | Snippet ID does not exist in the current workspace. |
+| `404 Not Found` | Snippet ID does not exist in the current workspace, or no API endpoint matches the requested path and method. |
 | `413 Payload Too Large` | JSON request body exceeds 2 MB or the plain-text `api.js` source exceeds 1 MB UTF-8. |
 | `415 Unsupported Media Type` | A JSON endpoint receives an unsupported content type. |
 | `500 Internal Server Error` | Unexpected server failure; return a generic message. |
 
 ## 5. Activity, isolation, and runtime boundary
 
-- Every endpoint resolves the workspace from the server-issued cookie; clients never send a workspace ID.
+- Every workspace-data endpoint resolves the workspace from the server-issued cookie; clients never send a workspace ID. `POST /api/session` creates or resolves that session, and `/health` does not access workspace data.
 - Any visit or action that reads or changes workspace data refreshes `last_activity_at`, matching the inactivity rule in the PRD. A scheduled server-side cleanup runs daily, independently of user requests, and deletes workspaces and their snippets when `last_activity_at` is at least 30 days old.
 - Snippets API calls from the browser interface and from `api.js` use the same routes, validation, and persistence behavior.
 - The Worker is served with a restrictive Content Security Policy that blocks direct network connections and nested workers. Its `fetch` function forwards requests to a browser-side broker over `postMessage`; the supported call form takes a URL string and an optional init object with `method`, `headers`, and `body`. `Request` objects are unsupported. The broker permits only same-origin `/api/snippets` routes with the methods documented in this contract. It rejects external URLs, `/api/session`, and all other paths before making a network request. The broker uses the browser's HttpOnly session cookie automatically; the cookie value is never available to user code. It resolves allowed calls to a Response-compatible object with `status`, `ok`, and `headers`, plus `json()` and `text()` methods. HTTP error statuses resolve as responses for inspection; they are distinct from rejected broker requests and JavaScript runtime errors. Network duration measures from request start through receipt of the full response body. Requests made after a run has stopped or timed out are rejected.

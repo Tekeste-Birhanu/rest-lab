@@ -86,8 +86,8 @@ The saved `api.js` source is a single workspace attribute, not a separate entity
 |---|---|---|
 | Resolve workspace from cookie | Unique index on `workspaces.cookie_token_hash` | Fast lookup and prevents duplicate tokens. |
 | Find workspaces due for inactivity cleanup | Index on `workspaces.last_activity_at` | Supports finding expired workspaces. |
-| List snippets for a workspace and order/filter by title | B-tree index on `snippets(workspace_id, title)` | Supports workspace-scoped listing and title order. Its leading `workspace_id` column also supports workspace-only lookups. |
-| List snippets for a workspace and filter/order by language | B-tree index on `snippets(workspace_id, language)` | Supports workspace-scoped language filtering and ordering. Its leading `workspace_id` column also supports workspace-only lookups. |
+| List snippets for a workspace and order/filter by title | B-tree index on `snippets(workspace_id, title)` | Supports workspace-scoped lookups. The API's case-insensitive `lower(title)` ordering does not directly use this index; add a matching expression index only if profiling shows it is needed. |
+| List snippets for a workspace and filter/order by language | B-tree index on `snippets(workspace_id, language)` | Supports workspace-scoped lookups. Case-insensitive language filtering and `lower(language)` ordering do not directly use this index; add matching expression indexes only if profiling shows they are needed. |
 
 Title/description text search can be implemented with the simplest query that meets V1 needs; add a specialized search index only if observed performance requires it.
 

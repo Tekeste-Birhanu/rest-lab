@@ -68,4 +68,4 @@ For browser tests, start the frontend with `npm run dev` in one terminal, then r
 
 ## Status
 
-Implementation has started with the frontend, Express server, and Prisma database foundations in `client/` and `server/`. Anonymous workspace initialization, starter data, `api.js` persistence, inactivity tracking, and scheduled cleanup are implemented; Snippets API operations and the user interface remain in progress. Follow [TASKS.md](docs/TASKS.md) for milestone order and completion status; deployment configuration is still pending.
+Implementation has started with the frontend, Express server, and Prisma database foundations in `client/` and `server/`. Anonymous workspace initialization, starter data, `api.js` persistence, inactivity tracking, scheduled cleanup, and workspace-scoped snippet reads, creation, updates, deletion, search, filtering, sorting, and pagination are implemented. The user interface remains in progress. Follow [TASKS.md](docs/TASKS.md) for milestone order and completion status; deployment configuration is still pending.

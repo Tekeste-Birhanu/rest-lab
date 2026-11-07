@@ -86,7 +86,7 @@
 
 - The API demonstrates `GET`, `POST`, `PUT`, `PATCH`, and `DELETE` behavior.
 - Successful creation returns `201 Created`; successful deletion returns `204 No Content`; successful reads and updates return `200 OK`.
-- Invalid input returns `400 Bad Request`; a valid ID with no matching snippet returns `404 Not Found`.
+- Invalid input returns `400 Bad Request`; a valid ID with no matching snippet or an unknown API path/method returns `404 Not Found`.
 - Unsupported media types for JSON request bodies return `415 Unsupported Media Type`.
 - Validation failures do not modify data.
 

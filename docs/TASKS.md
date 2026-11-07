@@ -77,55 +77,55 @@
 
 #### T-10 - Add JSON limits and common API errors
 
-- [ ] Limit JSON request bodies to 2 MB and reject unsupported content types, while honoring the plain-text media type and 1 MB UTF-8 limit for the editor save route.
-- [ ] Return the documented structured error format for malformed and invalid requests.
-- [ ] Require a matching `Origin` on `POST`, `PUT`, `PATCH`, and `DELETE`; reject missing or mismatched values with `403` before mutation.
-- [ ] Return generic `500` errors without stack traces or internal details.
-- [ ] Verify `400`, `403`, `413`, `415`, and `500` responses, including same-origin, missing-origin, and mismatched-origin mutations.
+- [x] Limit JSON request bodies to 2 MB and reject unsupported content types, while honoring the plain-text media type and 1 MB UTF-8 limit for the editor save route.
+- [x] Return the documented structured error format for malformed and invalid requests, including unmatched API paths and methods.
+- [x] Require a matching `Origin` on `POST`, `PUT`, `PATCH`, and `DELETE`; reject missing or mismatched values with `403` before mutation.
+- [x] Return generic `500` errors without stack traces or internal details.
+- [x] Verify `400`, `403`, `413`, `415`, and `500` responses, including same-origin, missing-origin, and mismatched-origin mutations.
 
 #### T-11 - Implement snippet validation
 
-- [ ] Validate required fields, trimming, lengths, non-whitespace code, 100 KB UTF-8 code size, and UUID path values.
-- [ ] Return field-level validation details where applicable.
-- [ ] Verify invalid data never partially changes a record.
+- [x] Validate required fields, trimming, lengths, non-whitespace code, 100 KB UTF-8 code size, and UUID path values.
+- [x] Return field-level validation details where applicable.
+- [x] Verify invalid payloads yield no partial normalized input; verify stored records remain unchanged in the T-14 update route tests.
 
 #### T-12 - Implement workspace-scoped snippet listing and retrieval
 
-- [ ] Implement `GET /api/snippets` and `GET /api/snippets/{snippetId}`.
-- [ ] Restrict results to the cookie's workspace; return `404` for missing or non-owned IDs.
-- [ ] Verify isolation with at least two workspaces.
+- [x] Implement `GET /api/snippets` and `GET /api/snippets/{snippetId}`.
+- [x] Restrict results to the cookie's workspace; return `404` for missing or non-owned IDs.
+- [x] Verify isolation with at least two workspaces.
 
 #### T-13 - Implement snippet creation
 
-- [ ] Implement `POST /api/snippets` with server-generated IDs and timestamps.
-- [ ] Return `201` and the created representation for valid input.
-- [ ] Verify invalid input returns `400` without creating a record.
+- [x] Implement `POST /api/snippets` with server-generated IDs and timestamps.
+- [x] Return `201` and the created representation for valid input.
+- [x] Verify invalid input returns `400` without creating a record.
 
 #### T-14 - Implement full and partial snippet updates
 
-- [ ] Implement `PUT` replacement with all editable fields required.
-- [ ] Implement `PATCH` for supplied fields only; `description: null` clears it.
-- [ ] Validate before writing and return `404` for missing or non-owned IDs.
-- [ ] Verify valid, invalid, partial, and cross-workspace updates.
+- [x] Implement `PUT` replacement with all editable fields required.
+- [x] Implement `PATCH` for supplied fields only; `description: null` clears it.
+- [x] Validate before writing and return `404` for missing or non-owned IDs.
+- [x] Verify valid, invalid, partial, and cross-workspace updates; confirm invalid updates leave the stored record unchanged.
 
 #### T-15 - Implement snippet deletion
 
-- [ ] Implement `DELETE /api/snippets/{snippetId}` for owned records.
-- [ ] Return `204` with no body on success and `404` for missing or non-owned IDs.
-- [ ] Verify deletion and workspace isolation.
+- [x] Implement `DELETE /api/snippets/{snippetId}` for owned records.
+- [x] Return `204` with no body on success and `404` for missing or non-owned IDs.
+- [x] Verify deletion and workspace isolation.
 
 #### T-16 - Implement snippet search and language filtering
 
-- [ ] Search title and description with case-insensitive partial matching.
-- [ ] Filter language with case-insensitive exact matching.
-- [ ] Verify combined filters and workspace isolation.
+- [x] Search title and description with case-insensitive partial matching.
+- [x] Filter language with case-insensitive exact matching.
+- [x] Verify combined filters and workspace isolation.
 
 #### T-17 - Implement sorting and pagination
 
-- [ ] Support case-insensitive title/language sorting, ascending/descending order, and snippet-ID tie-breaking.
-- [ ] Apply defaults: title ascending, limit 20, offset 0; enforce maximum limit 100.
-- [ ] Return `total` after filters and before pagination; reject invalid query values with `400`.
-- [ ] Verify defaults, mixed-case sort values, sort combinations, pagination, and totals.
+- [x] Support case-insensitive title/language sorting, ascending/descending order, and snippet-ID tie-breaking.
+- [x] Apply defaults: title ascending, limit 20, offset 0; enforce maximum limit 100.
+- [x] Return `total` after filters and before pagination; reject invalid query values with `400`.
+- [x] Verify defaults, mixed-case sort values, sort combinations, pagination, and totals.
 
 ## M3 - Workspace runner
 

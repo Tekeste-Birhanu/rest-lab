@@ -120,7 +120,12 @@ describe('workspace session endpoints', () => {
       .set('Content-Type', 'application/json')
       .send(JSON.stringify({ apiJs: 'not accepted' }))
       .expect(415)
-    expect(unsupported.body.error.code).toBe('UNSUPPORTED_MEDIA_TYPE')
+    expect(unsupported.body).toEqual({
+      error: {
+        code: 'UNSUPPORTED_MEDIA_TYPE',
+        message: 'Use Content-Type: text/plain; charset=utf-8.',
+      },
+    })
 
     await request(app)
       .put('/api/session/api-js')
