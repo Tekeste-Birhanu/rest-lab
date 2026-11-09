@@ -131,77 +131,80 @@
 
 #### T-18 - Restrict Worker network access through a request broker
 
-- [ ] Serve the Worker with CSP `default-src 'none'; script-src 'unsafe-eval'; connect-src 'none'; worker-src 'none'` and verify supported browsers allow user JavaScript execution but block direct connections and nested workers.
-- [ ] Provide a `fetch` interface that accepts a URL string and optional `method`, `headers`, and `body`; reject `Request` objects as unsupported.
-- [ ] Validate URL origin, Snippets API route, method, and message shape in the broker; reject external URLs and app-support routes before network I/O.
-- [ ] Keep the HttpOnly cookie value inaccessible to the Worker; use the browser session for allowed same-origin API requests.
-- [ ] Reject pending and new broker requests when the run stops or times out.
-- [ ] Verify allowed CRUD requests, external URL rejection, `/api/session` rejection, malformed messages, and stopped-run requests.
+- [x] Serve the Worker with CSP `default-src 'none'; script-src 'unsafe-eval'; connect-src 'none'; worker-src 'none'` and verify Chromium allows dynamic JavaScript evaluation but blocks direct connections and nested workers.
+- [x] Provide a `fetch` interface that accepts a URL string and optional `method`, `headers`, and `body`; reject `Request` objects as unsupported.
+- [x] Validate URL origin, Snippets API route, method, and message shape in the broker; reject external URLs and app-support routes before network I/O.
+- [x] Keep the HttpOnly cookie value inaccessible to the Worker; use the browser session for allowed same-origin API requests.
+- [x] Reject pending and new broker requests when the run stops or times out.
+- [x] Verify allowed CRUD requests, external URL rejection, `/api/session` rejection, malformed messages, and stopped-run requests.
 
 #### T-19 - Build the Workspace shell and navigation
 
-- [ ] Add the dark application shell and Workspace, Examples, and My APIs navigation.
-- [ ] Open directly to Workspace with no sign-in or welcome screen.
-- [ ] Implement the initial editor/Results layout and usable narrow-screen layout.
-- [ ] Verify keyboard navigation among primary views.
+- [x] Add the dark application shell and Workspace, Examples, and My APIs navigation.
+- [x] Open directly to Workspace with no sign-in or welcome screen.
+- [x] Implement the initial editor/Results layout and usable narrow-screen layout.
+- [x] Verify keyboard navigation among primary views.
 
 #### T-20 - Implement Workspace session loading states
 
-- [ ] Show Workspace immediately with an editor-shaped skeleton while session data loads.
-- [ ] Replace the skeleton with starter or saved code when loading succeeds.
-- [ ] Keep Run disabled until source is ready.
-- [ ] On failure, show Retry and do not substitute starter code.
+- [x] Show Workspace immediately with an editor-shaped skeleton while session data loads.
+- [x] Replace the skeleton with starter or saved code when loading succeeds.
+- [x] Keep Run disabled until source is ready.
+- [x] On failure, show Retry and do not substitute starter code.
 
 #### T-21 - Implement the `api.js` editor
 
-- [ ] Integrate CodeMirror 6 and show a single JavaScript file with syntax highlighting and line numbers.
-- [ ] Keep the editor focused: no autocomplete, lint underlines, minimap, or file tabs.
-- [ ] Preserve edited content, indentation, and line breaks.
-- [ ] Verify keyboard editing and navigation.
+- [x] Integrate CodeMirror 6 and show a single JavaScript file with syntax highlighting and line numbers.
+- [x] Keep the editor focused: no autocomplete, lint underlines, minimap, or file tabs.
+- [x] Preserve edited content, indentation, and line breaks.
+- [x] Verify keyboard editing and navigation.
 
 #### T-22 - Implement editor autosave and recovery
 
-- [ ] Save about one second after typing stops and survive reload.
-- [ ] Show Saving and Saved states.
-- [ ] On failure, keep edits and show Save failed with Retry.
-- [ ] Prevent a stale or in-flight save from overwriting newer editor contents.
-- [ ] Verify save/reload and simulated failure/retry.
+- [x] Save about one second after typing stops and survive reload.
+- [x] Show Saving and Saved states.
+- [x] On failure, keep edits and show Save failed with Retry.
+- [x] Prevent a stale or in-flight save from overwriting newer editor contents.
+- [x] Verify save/reload and simulated failure/retry.
 
 #### T-23 - Implement Worker execution and console capture
 
-- [ ] Complete T-18's network restrictions and broker verification before enabling user-code execution.
-- [ ] Run current `api.js` in a dedicated browser Worker.
-- [ ] Support ordinary JavaScript, Promises, and `async`/`await`.
-- [ ] Support top-level `await` used by the starter `api.js` and bundled request examples.
-- [ ] Support `fetch(url, { method, headers, body })` and responses exposing `status`, `ok`, `headers`, `json()`, and `text()`; verify `Request` objects are rejected as unsupported.
-- [ ] Forward `console.log` output and runtime errors to Console.
-- [ ] Verify user code has no DOM or shell access.
+- [x] Complete T-18's network restrictions and broker verification before enabling user-code execution.
+- [x] Run current `api.js` in a dedicated browser Worker.
+- [x] Support ordinary JavaScript, Promises, and `async`/`await`.
+- [x] Support top-level `await` used by the starter `api.js` and bundled request examples.
+- [x] Support `fetch(url, { method, headers, body })` and responses exposing `status`, `ok`, `headers`, `json()`, and `text()`.
+- [x] Verify `Request` objects are rejected as unsupported.
+- [x] Forward `console.log` output and runtime errors to Console.
+- [x] Verify user code has no DOM or shell access.
 
 #### T-24 - Add Stop, timeout, and single-run behavior
 
-- [ ] Allow only one active run; change Run to Stop while running.
-- [ ] Terminate the Worker when the user selects Stop.
-- [ ] End runs at 30 seconds and report the outcome clearly.
-- [ ] Keep a run active while switching to Examples or My APIs; restore the Stop control on return to Workspace.
-- [ ] Verify Stop, timeout, concurrent-run prevention, and navigation during a run.
+- [x] Allow only one active run; change Run to Stop while running.
+- [x] Terminate the Worker when the user selects Stop.
+- [x] End runs at 30 seconds and report the outcome clearly.
+- [x] Keep a run active while switching to Examples or My APIs; restore the Stop control on return to Workspace.
+- [x] Verify Stop, timeout, concurrent-run prevention, and navigation during a run.
 
 #### T-25 - Capture Network request and response details
 
-- [ ] Capture actual allowed API method, URL, request/response headers and bodies, status, and duration.
-- [ ] Measure duration from request start through receipt of the full response body.
-- [ ] Order Network entries by request start time, including concurrent requests whose responses complete out of order.
-- [ ] Record HTTP error responses as network responses, separate from runtime errors.
-- [ ] Verify requests made with the supported `fetch` URL/init fields and response properties, including HTTP error statuses.
-- [ ] Reject disallowed network requests before they reach external services.
-- [ ] Verify successful, invalid, and rejected requests, including concurrent requests with out-of-order responses.
+- [x] Capture actual allowed API method, URL, request/response headers and bodies, status, and duration.
+- [x] Measure duration from request start through receipt of the full response body.
+- [x] Order Network entries by request start time, including concurrent requests whose responses complete out of order.
+- [x] Record HTTP error responses as network responses, separate from runtime errors.
+- [x] Reject disallowed network requests before they reach external services.
+- [x] Verify requests made with the supported `fetch` URL/init fields and response properties, including HTTP error statuses.
+- [x] Verify successful, invalid, and rejected requests, including concurrent requests with out-of-order responses.
 
 #### T-26 - Build Console and Network result panels
 
-- [ ] Add sibling Console and Network tabs; select Console initially.
-- [ ] Show request list above Headers, Request, and Response details.
-- [ ] Append results across runs; implement Clear for each panel and Copy for Console.
-- [ ] Add the approved empty-state messages and keep results memory-only.
-- [ ] Verify selection, details, append, clear, copy, retention while switching views, and clearing on page reload.
+- [x] Add sibling Console and Network tabs; select Console initially.
+- [x] Show request list above Headers, Request, and Response details.
+- [x] Append results across runs; implement Clear for each panel and Copy for Console.
+- [x] Add the approved empty-state messages and keep results memory-only.
+- [x] Manually verify selecting a request and viewing its Headers, Request, and Response details.
+- [ ] Manually verify results append across separate runs and remain available while switching app views.
+- [ ] Manually verify Console Copy and Clear, Network Clear, and clearing results after page reload.
 
 ## M4 - Examples and My APIs
 

@@ -56,6 +56,8 @@ npm run dev
 
 The Vite development server proxies `/api` requests to the backend on port `3001`, keeping local browser requests on the configured app origin.
 
+The same-origin `/restlab-worker.js` asset runs user code. Vite development and preview serve it with the restrictive Worker Content Security Policy defined in [ARCHITECTURE.md](docs/ARCHITECTURE.md). The production host must preserve that response header when deployment is configured.
+
 The backend listens on port `3001` by default. `GET http://localhost:3001/health` returns `{ "status": "ok" }`. Set `PORT` to use a different port.
 
 Create a frontend production build with `npm run build` and preview it locally with `npm run preview` from `client/`. Build the backend with `npm run build` and start the compiled server with `npm start` from `server/`.
